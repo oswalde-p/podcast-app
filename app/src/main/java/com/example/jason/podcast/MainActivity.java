@@ -1,12 +1,15 @@
 package com.example.jason.podcast;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.android.volley.Request;
@@ -22,6 +25,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * based on https://www.androidhive.info/2016/01/android-working-with-recycler-view/
+ */
 public class MainActivity extends AppCompatActivity {
 
     private List<Podcast> podcastList = new ArrayList<>();
@@ -39,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+
         recyclerView.setAdapter(mAdapter);
 
 
@@ -48,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         EditText searchBar = (EditText) findViewById(R.id.search_bar);
         String searchTerm = searchBar.getText().toString();
         search(searchTerm);
+        hideKeyboard(this);
     }
 
     private void search(String term){
@@ -94,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < responses.length(); i++){
                 JSONObject podcast = responses.getJSONObject(i);
                 String name = podcast.getString("trackName");
-                Podcast item = new Podcast();
-                item.setTitle(name);
+                String imgUrl = podcast.getString("artworkUrl60");
+                Podcast item = new Podcast(name, imgUrl);
                 podcastList.add(item);
                 Log.d("Name", i + ": " +podcast.getString("trackName"));
             }
@@ -106,5 +115,15 @@ public class MainActivity extends AppCompatActivity {
         Log.d("feedsList", podcastList.toString());
     }
 
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
 }

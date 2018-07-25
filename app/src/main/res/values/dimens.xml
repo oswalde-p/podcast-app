@@ -6,4 +6,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="row_padding_vertical">10dp</dimen>
     <dimen name="min_clickable">50dp</dimen>
+    <dimen name="small_thumbnail_width">60dp</dimen>
 </resources>

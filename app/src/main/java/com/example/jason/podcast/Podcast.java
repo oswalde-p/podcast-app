@@ -7,6 +7,12 @@ package com.example.jason.podcast;
 class Podcast {
     private String title;
     private String thumbnail;
+    private String imgUrl60;
+
+    public Podcast(String name, String imgUrl60) {
+        this.setTitle(name);
+        this.imgUrl60 = imgUrl60;
+    }
 
     public String getTitle(){
         return title;
@@ -16,11 +22,8 @@ class Podcast {
         this.title = title;
     }
 
-    public String getThumbnail(){
-        return thumbnail;
+    public String getThumbnailSmall(){
+        return imgUrl60;
     }
 
-    public void setThumbnail(String thumbnail){
-        this.thumbnail = thumbnail;
-    }
 }
