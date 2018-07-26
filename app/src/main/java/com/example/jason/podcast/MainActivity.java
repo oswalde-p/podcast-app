@@ -1,6 +1,7 @@
 package com.example.jason.podcast;
 
 import android.app.Activity;
+import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -48,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         recyclerView.setAdapter(mAdapter);
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(),
+                recyclerView,
+                new MyRecyclerClickListner(getApplicationContext(), podcastList) {
+
+        }));
 
 
     }
@@ -98,21 +106,24 @@ public class MainActivity extends AppCompatActivity {
         try {
             JSONObject obj = new JSONObject(response);
             JSONArray responses = obj.getJSONArray("results");
-            Log.d("sd", responses.toString());
-            int length = obj.getInt("resultCount");
-            for (int i = 0; i < responses.length(); i++){
-                JSONObject podcast = responses.getJSONObject(i);
-                String name = podcast.getString("trackName");
-                String imgUrl = podcast.getString("artworkUrl60");
-                Podcast item = new Podcast(name, imgUrl);
-                podcastList.add(item);
-                Log.d("Name", i + ": " +podcast.getString("trackName"));
+            if(obj.getInt("resultCount") == 0){
+                Toast.makeText(getApplicationContext(), "No results :(", Toast.LENGTH_SHORT)
+                        .show();
+            }else{
+                for (int i = 0; i < responses.length(); i++) {
+                    JSONObject podcast = responses.getJSONObject(i);
+                    String name = podcast.getString("trackName");
+                    String imgUrl = podcast.getString("artworkUrl60");
+                    Podcast item = new Podcast(name, imgUrl);
+                    podcastList.add(item);
+                    Log.d("Name", i + ": " + podcast.getString("trackName"));
+
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
         }
         mAdapter.notifyDataSetChanged();
-        Log.d("feedsList", podcastList.toString());
     }
 
     public static void hideKeyboard(Activity activity) {
