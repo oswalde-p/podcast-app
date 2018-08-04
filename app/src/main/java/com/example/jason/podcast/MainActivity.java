@@ -3,12 +3,18 @@ package com.example.jason.podcast;
 import android.app.Activity;
 import android.graphics.Movie;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -36,11 +42,23 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
 
+    private DrawerLayout mDrawerLayout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d("debug", "finding + setting actionbar");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        Log.d("debug", "done!");
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        Log.d("debug", "finding+setting recyclerView");
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         mAdapter = new PodcastAdapter(podcastList);
@@ -57,7 +75,44 @@ public class MainActivity extends AppCompatActivity {
 
         }));
 
+        Log.d("debug", "done!");
 
+        // get nav drawer layout and add listener for events
+        Log.d("debug", "finding drawer layout");
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        Log.d("debug", "done!");
+
+        Log.d("debug", "finding navView and setting listener");
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        /*navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        Toast.makeText(getApplicationContext(), menuItem.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+
+                        return true;
+                    }
+                });
+                */
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void search(View v){
