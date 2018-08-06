@@ -33,8 +33,8 @@ public class PodcastAdapter extends RecyclerView.Adapter<PodcastAdapter.MyViewHo
 
         public MyViewHolder(View view){
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            image = (WebView) view.findViewById(R.id.image);
+            title = view.findViewById(R.id.title);
+            image = view.findViewById(R.id.image);
         }
     }
 

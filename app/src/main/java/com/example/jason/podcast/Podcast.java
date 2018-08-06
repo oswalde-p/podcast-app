@@ -4,7 +4,7 @@ package com.example.jason.podcast;
  * Created by jason on 24/05/18.
  */
 
-class Podcast {
+public class Podcast {
     private String title;
     private String thumbnail;
     private String imgUrl60;
