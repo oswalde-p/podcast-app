@@ -1,6 +1,7 @@
 package com.example.jason.podcast;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ import com.android.volley.toolbox.Volley;
 
 public class SearchFragment extends Fragment {
 
+    public final static String PODCAST_ID_EXTRA = R.string.package_name + ".ID";
     private List<Podcast> podcastList = new ArrayList<>();
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -88,7 +91,9 @@ public class SearchFragment extends Fragment {
     private void select(Podcast podcast) {
         // do something with selected podcast
         Toast.makeText(getContext(), podcast.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
-
+        Intent intent = new Intent(getActivity(), PodcastDetailsActivity.class);
+        intent.putExtra(PODCAST_ID_EXTRA, podcast.getId());
+        startActivity(intent);
     }
 
     public void search(View v){
@@ -152,17 +157,22 @@ public class SearchFragment extends Fragment {
             Log.d("debug", responses.toString());
             int length = obj.getInt("resultCount");
             for (int i = 0; i < responses.length(); i++){
-                JSONObject podcast = responses.getJSONObject(i);
-                String name = podcast.getString("trackName");
-                String imgUrl = podcast.getString("artworkUrl60");
-                Podcast item = new Podcast(name, imgUrl);
+                Podcast item = makePod(responses.getJSONObject(i));
                 podcastList.add(item);
-                Log.d("debug", i + ": " +podcast.getString("trackName"));
+                Log.d("debug", i + ": " +item.getTitle());
             }
         }catch (Exception e){
             e.printStackTrace();
         }
         mAdapter.notifyDataSetChanged();
         Log.d("debug", podcastList.toString());
+    }
+
+    private Podcast makePod(JSONObject podJson) throws JSONException {
+        String name = podJson.getString("trackName");
+        String imgUrl = podJson.getString("artworkUrl60");
+        String id = podJson.getString("collectionId");
+        return new Podcast(id, name, imgUrl);
+
     }
 }
