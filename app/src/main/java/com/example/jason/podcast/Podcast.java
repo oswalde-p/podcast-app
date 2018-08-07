@@ -10,6 +10,9 @@ public class Podcast {
     private String imgUrl60;
     private String id;
 
+
+    private String feedUrl;
+
     public Podcast(String id, String name, String imgUrl60) {
         this.setTitle(name);
         this.imgUrl60 = imgUrl60;
@@ -29,5 +32,13 @@ public class Podcast {
     }
 
     public String getId(){return id;}
+
+    public String getFeedUrl() {
+        return feedUrl;
+    }
+
+    public void setFeedUrl(String feedUrl) {
+        this.feedUrl = feedUrl;
+    }
 
 }

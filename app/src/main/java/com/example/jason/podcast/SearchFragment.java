@@ -92,7 +92,7 @@ public class SearchFragment extends Fragment {
         // do something with selected podcast
         Toast.makeText(getContext(), podcast.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
         PodcastDetailsFragment fragment = new PodcastDetailsFragment();
-        fragment.setPodcastId(podcast.getId());
+        fragment.setFeedUrl(podcast.getFeedUrl());
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, fragment);
         ft.addToBackStack(null);
@@ -175,7 +175,9 @@ public class SearchFragment extends Fragment {
         String name = podJson.getString("trackName");
         String imgUrl = podJson.getString("artworkUrl60");
         String id = podJson.getString("collectionId");
-        return new Podcast(id, name, imgUrl);
+        Podcast podcast = new Podcast(id, name, imgUrl);
+        podcast.setFeedUrl(podJson.getString("feedUrl"));
+        return podcast;
 
     }
 }
