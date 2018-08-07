@@ -1,10 +1,10 @@
 package com.example.jason.podcast;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -91,9 +91,12 @@ public class SearchFragment extends Fragment {
     private void select(Podcast podcast) {
         // do something with selected podcast
         Toast.makeText(getContext(), podcast.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getActivity(), PodcastDetailsActivity.class);
-        intent.putExtra(PODCAST_ID_EXTRA, podcast.getId());
-        startActivity(intent);
+        PodcastDetailsFragment fragment = new PodcastDetailsFragment();
+        fragment.setPodcastId(podcast.getId());
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     public void search(View v){
