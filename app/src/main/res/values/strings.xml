@@ -24,4 +24,10 @@
 
     <string name="episodes">Episodes</string>
 
+    <!-- default values for podcast details (only used when no value found) -->
+    <string name="default_title">No Title Found</string>
+    <string name="default_creator">Unknown</string>
+    <string name="default_description">No description found</string>
+    <string name="default_episode_title">Unknown Episode</string>
+
 </resources>
